@@ -1,19 +1,12 @@
-<script>
-  const web = `https://discord.com/api/webhooks/1318716344228773898/rOkNtdwcqt-fGMFqXMoX2rAHDJo_MXRhOK525OYrq23WuvZl0k5j5asxT7pTO5ky9yXc`
-function bob(){
-  var msg = {content: "ee", username: "bob"}
-  var content = window.prompt("content?")
-  var user = window.prompt("user?")
-  msg.content = content; msg.username = user
-fetch(web, {
-        method: 'POST',
-        body: JSON.stringify(msg),
-        headers: {
-            'content-type': 'application/json'
-        }})
+<body><script>
+async function ee(){
+try{
+const res = await fetch("https://insidious-silent-calculator.glitch.me")
+  const text = await res.text()
+  document.body.innerHTML = text
 }
-  
-</script>
-<button onclick="bob()">
-  e
-</button>
+  catch(er){
+    console.error(`error: ${er.message}`)
+  }
+}
+</script></body>
