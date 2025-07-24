@@ -12,7 +12,9 @@
 <label class="second">content </label><input id="content" class="second" placeholder="@everyone">
 <label class="second">username </label><input id="user" class="second">
 <label class="second">avatar </label><input id="avatar" class="second" placeholder="URL">
+<input type="file" class="second" multible>
 <button class="second" onclick="del()">DELETE</button>
+<button onclick="clearfiles()" class="second">clear file</button>
 <style>
   img {border-radius:70px; transition:200ms}
   img:hover {border-radius:5px; transition:250ms}
@@ -26,10 +28,13 @@
   //does nothing XD  
     //this function will prob not be used but its here for the shits and the giggles
   }
+  function clearfiles(){
+  document.querySelector('input[type=file]').value = null
+  }
 async function info(){
   try{const res = await fetch(web)
   if(!res.ok){
-    throw new Error(`${res.status}`)
+    throw new Error(`${res.status} not a valid url`)
     return;
   }
 const json = await res.json()  
@@ -49,7 +54,7 @@ for(var i = 0; i < document.querySelectorAll(".second").length; i++){document.qu
  const res = await fetch(web, {method:'DELETE'})
  console.log(res.status)
  window.alert("DELETED!!!")
- window.reload()
+ window.location.reload()
  if(!res.ok){
  throw new Error(res.status)
  }
@@ -59,22 +64,26 @@ for(var i = 0; i < document.querySelectorAll(".second").length; i++){document.qu
  }
  } 
   
+
+  
   async function send(){
-    var msg = {content:null, username:null, avatar_url:null}
-    document.querySelector("#content").value === null || document.querySelector("#content").value == ''? eval('window.alert("Content box cant be null"); return 0;') :msg.content = document.querySelector("#content").value
-     document.querySelector("#user").value === null || document.querySelector("#user").value == ''? msg.username = name : msg.username = document.querySelector("#user").value
-    document.querySelector("#avatar").value === null || document.querySelector("#avatar").value == ''? donothing() : msg.avatar_url = document.querySelector("#avatar").value
+    const msg = new FormData()
+    msg.append('content', null)
+    msg.append('username', null)
+    msg.append('avatar_url', null)
+    msg.append('file', null)
+    document.querySelector("#content").value === null || document.querySelector("#content").value == ''? msg.delete('content') :msg.set('content', document.querySelector("#content").value)
+     document.querySelector("#user").value === null || document.querySelector("#user").value == ''? msg.set('username', name) : msg.set('username', document.querySelector("#user").value)
+    document.querySelector("#avatar").value === null || document.querySelector("#avatar").value == ''? msg.delete('avatar_url') : msg.set('avatar_url', document.querySelector("#avatar").value)
+document.querySelector('input[type=file]').value == ""? msg.delete('file') : msg.set('file', document.querySelector('input[type=file]').files[0])
+
     try{const res = await fetch(web)
   if(!res.ok){
     throw new Error(`${res.status}`)
-    return;
   }
-fetch(web, {
-        method: 'POST',
-        body: JSON.stringify(msg),
-        headers: {
-            'content-type': 'application/json'
-        }})
+const xhr = new XMLHttpRequest()
+xhr.open("POST", web)
+xhr.send(msg)
     console.log(res.status)    
   }
   catch(er){
